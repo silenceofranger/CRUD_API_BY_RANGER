@@ -1,5 +1,6 @@
 package API_SCALA_MONGO_AKKA.Client_API
 
+import API_SCALA_MONGO_AKKA.Client_API.ClientCaseClass.{Client, Clients}
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import spray.json.DefaultJsonProtocol
 
