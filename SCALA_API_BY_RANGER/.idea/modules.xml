@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/SCALA_API_BY_RANGER.iml" filepath="$PROJECT_DIR$/.idea/modules/SCALA_API_BY_RANGER.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/SCALA_API_BY_RANGER-build.iml" filepath="$PROJECT_DIR$/.idea/modules/SCALA_API_BY_RANGER-build.iml" />
+    </modules>
+  </component>
+</project>
