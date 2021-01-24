@@ -5,12 +5,12 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives.{complete, get}
 import akka.http.scaladsl.server.{Directives, Route}
 import com.typesafe.scalalogging.LazyLogging
-
+import scala.io.StdIn
 import scala.util.{Failure, Success}
 
 object ClientStoreServer extends LazyLogging with App{
 
-  implicit val system = ActorSystem("Akka-HTTP-REST-Server")
+  implicit val system = ActorSystem("my-system")
 
   implicit val ec = system.dispatcher
 
@@ -24,19 +24,19 @@ object ClientStoreServer extends LazyLogging with App{
   val updateClientUrlRoute=clientAPI.updateClients()
 //  http://127.0.0.1:8080/updateClientField?name=abc&url=bad.com
   val deleteClientRoute=clientAPI.deleteClientByField()
-
+//  http://127.0.0.1:8080/deleteClient?url=abc.com
   val findClientByValueRoute=clientAPI.findClientByValue()
+//  http://127.0.0.1:8080/findClientByValue?value=43
+  val pagingRoute = clientAPI.pagination()
+//  http://127.0.0.1:8080/paging?pageNumber=2&rowsPerPage=2
 
-  val routes:Route=Directives.concat(findClientByValueRoute,deleteClientRoute,updateClientUrlRoute,getClientsRoute,createRoute)
 
-  val host = "127.0.0.1"
-  val port = 8080
-  val httpServerFuture = Http().bindAndHandle(routes, host, port)
+  val routes:Route=Directives.concat(pagingRoute,findClientByValueRoute,deleteClientRoute,updateClientUrlRoute,getClientsRoute,createRoute)
+  val bindingFuture = Http().newServerAt("127.0.0.1", 8080).bind(routes)
+  println(s" SERVER IS ONLINE AT http://127.0.0.1:8080/ \n PRESS ENTER TO STOP!")
+  StdIn.readLine()
+  bindingFuture
+    .flatMap(_.unbind())
+    .onComplete(_=> system.terminate())
 
-  httpServerFuture.onComplete {
-    case Success(binding) =>
-      logger.info(s"AKKA-HTTP IS ONLINE AT ${binding.localAddress}.")
-    case Failure(exception) =>
-      logger.info(s"AKKA-HTTP FAILED TO START")
-  }
 }

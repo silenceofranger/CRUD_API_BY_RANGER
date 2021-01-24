@@ -68,4 +68,16 @@ class ClientRoutes extends JsonSupport with LazyLogging{
       }
     }
   }
+
+  def pagination():Route = {
+    path("paging"){
+      get {
+        parameter("pageNumber".withDefault(0),"rowsPerPage".withDefault(0)){(x,y) =>
+          onSuccess(ClientRepoFunctions.paging(x,y)){ foundClients =>
+            complete(foundClients)
+          }
+        }
+      }
+    }
+  }
 }
